@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		16FFE4832DBBEE8E0025A42A /* PostgresClientKit in Frameworks */ = {isa = PBXBuildFile; productRef = 16FFE4822DBBEE8E0025A42A /* PostgresClientKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		16FFE4722DBBEE390025A42A /* AutoRepairShopPG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoRepairShopPG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16FFE4832DBBEE8E0025A42A /* PostgresClientKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = AutoRepairShopPG;
 			packageProductDependencies = (
+				16FFE4822DBBEE8E0025A42A /* PostgresClientKit */,
 			);
 			productName = AutoRepairShopPG;
 			productReference = 16FFE4722DBBEE390025A42A /* AutoRepairShopPG.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 16FFE4692DBBEE390025A42A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				16FFE4812DBBEE8E0025A42A /* XCRemoteSwiftPackageReference "PostgresClientKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 16FFE4732DBBEE390025A42A /* Products */;
 			projectDirPath = "";
@@ -321,6 +330,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		16FFE4812DBBEE8E0025A42A /* XCRemoteSwiftPackageReference "PostgresClientKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/codewinsdotcom/PostgresClientKit";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		16FFE4822DBBEE8E0025A42A /* PostgresClientKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16FFE4812DBBEE8E0025A42A /* XCRemoteSwiftPackageReference "PostgresClientKit" */;
+			productName = PostgresClientKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 16FFE46A2DBBEE390025A42A /* Project object */;
 }
