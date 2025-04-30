@@ -10,6 +10,12 @@ import Foundation
 protocol OrdersRepositoryProtocol {
     func getAllOrders(limit: Int, offset: Int) -> [Order]
     func getAllActiveOrders(limit: Int, offset: Int) -> [Order]
+    
+    func getOrderById(orderId: Int) -> Order?
+    
+    func getOrdersByCarId(carId: Int, limit: Int, offset: Int) -> [Order]
+    func getActiveOrdersByCarId(carId: Int, limit: Int, offset: Int) -> [Order]
+    
     func getOrdersByClientId(clientId: Int, limit: Int, offset: Int) -> [Order]
     func getActiveOrdersByClientId(clientId: Int, limit: Int, offset: Int) -> [Order]
 }

@@ -9,11 +9,18 @@ import SwiftUI
 
 struct OrdersView: View {
     @ObservedObject var viewModel: OrdersViewModel
-    @State var clientIdText: String = ""
+    @State private var searchText: String = ""
+    @State private var searchType: SearchType = .orderId
     
     @State private var showOnlyActiveOrders: Bool = false
     @State private var currentPage: Int = 0
-    let itemsPerPage: Int = 100
+    let itemsPerPage: Int = 1000
+    
+    enum SearchType: String, CaseIterable {
+        case orderId = "Order ID"
+        case carId = "Car ID"
+        case clientId = "Client ID"
+    }
     
     var body: some View {
         VStack {
@@ -25,12 +32,27 @@ struct OrdersView: View {
                 }
                 .padding(.bottom)
             
+            Picker("Искать по:", selection: $searchType) {
+                ForEach(SearchType.allCases, id: \.self) { type in
+                    Text(type.rawValue).tag(type)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: searchType) { _ in
+                searchText = ""
+                loadPage()
+            }
+            
             HStack {
-                TextField("", text: $clientIdText, prompt: Text("Введите ID клиента"))
+                TextField("", text: $searchText, prompt: Text("Введите \(searchType.rawValue)"))
+                    .onSubmit {
+                        loadPage()
+                    }
+                
                 Button("Найти") {
                     loadPage()
                 }
-                .onChange(of: clientIdText) { newValue in
+                .onChange(of: searchText) { newValue in
                     if newValue.isEmpty {
                         loadPage()
                         return
@@ -38,7 +60,7 @@ struct OrdersView: View {
                     
                     let filtered = newValue.filter { $0.isNumber }
                     if filtered != newValue {
-                        clientIdText = filtered
+                        searchText = filtered
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -62,7 +84,7 @@ struct OrdersView: View {
                 }
             }
             
-            if clientIdText.isEmpty {
+            if searchText.isEmpty {
                 HStack {
                     Button("Предыдущая") {
                         if currentPage > 0 {
@@ -88,25 +110,48 @@ struct OrdersView: View {
     
     private func loadPage() {
         let offset = currentPage * itemsPerPage
-        if !clientIdText.isEmpty {
+        
+        if searchText.isEmpty {
+            if showOnlyActiveOrders {
+                viewModel.fetchAllActiveOrders(limit: itemsPerPage, offset: offset)
+            } else {
+                viewModel.fetchAllOrders(limit: itemsPerPage, offset: offset)
+            }
+            return
+        }
+        
+        let id = Int(searchText) ?? -1
+        
+        switch searchType {
+        case .orderId:
+            viewModel.fetchOrderById(orderId: id)
+        case .carId:
+            if showOnlyActiveOrders {
+                viewModel.fetchActiveOrdersByCarId(
+                    carId: id,
+                    limit: itemsPerPage,
+                    offset: offset
+                )
+            } else {
+                viewModel.fetchOrdersByCarId(
+                    carId: id,
+                    limit: itemsPerPage,
+                    offset: offset
+                )
+            }
+        case .clientId:
             if showOnlyActiveOrders {
                 viewModel.fetchActiveOrdersByClientId(
-                    clientId: Int(clientIdText) ?? -1,
+                    clientId: id,
                     limit: itemsPerPage,
                     offset: offset
                 )
             } else {
                 viewModel.fetchOrdersByClientId(
-                    clientId: Int(clientIdText) ?? -1,
+                    clientId: id,
                     limit: itemsPerPage,
                     offset: offset
                 )
-            }
-        } else {
-            if showOnlyActiveOrders {
-                viewModel.fetchAllActiveOrders(limit: itemsPerPage, offset: offset)
-            } else {
-                viewModel.fetchAllOrders(limit: itemsPerPage, offset: offset)
             }
         }
     }

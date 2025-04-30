@@ -25,6 +25,33 @@ class OrdersRepository: BaseRepository<OrdersParser>, OrdersRepositoryProtocol {
         )
     }
     
+    func getOrderById(orderId: Int) -> Order? {
+        return getAllRowsWithCondition(
+            querySource: .orders,
+            conditionParams: ["id": orderId],
+            limit: 1,
+            offset: 0
+        ).first
+    }
+    
+    func getOrdersByCarId(carId: Int, limit: Int, offset: Int) -> [Order] {
+        return getAllRowsWithCondition(
+            querySource: .orders,
+            conditionParams: ["car_id": carId],
+            limit: limit,
+            offset: offset
+        )
+    }
+    
+    func getActiveOrdersByCarId(carId: Int, limit: Int, offset: Int) -> [Order] {
+        return getAllRowsWithCondition(
+            querySource: .activeOrders,
+            conditionParams: ["car_id": carId],
+            limit: limit,
+            offset: offset
+        )
+    }
+    
     func getOrdersByClientId(clientId: Int, limit: Int, offset: Int) -> [Order] {
         return callStoredFunction(
             querySource: .ordersByClientIdFunction,

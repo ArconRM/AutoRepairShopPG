@@ -22,7 +22,7 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
             let connection = try Connection(configuration: configuration)
             defer { connection.close() }
             
-            let statement = try connection.prepareStatement(text: "SELECT * FROM \(querySource.rawValue) LIMIT \(limit) OFFSET \(offset);")
+            let statement = try connection.prepareStatement(text: "SELECT * FROM \(querySource.rawValue) ORDER BY id ASC LIMIT \(limit) OFFSET \(offset);")
             defer { statement.close() }
             
             let cursor = try statement.execute()
@@ -39,7 +39,7 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
         return result
     }
     
-    func getAllRows(querySource: QuerySources, conditionParams: [String: Any], limit: Int, offset: Int) -> [Parser.Model] {
+    func getAllRowsWithCondition(querySource: QuerySources, conditionParams: [String: Any], limit: Int, offset: Int) -> [Parser.Model] {
         var result: [Parser.Model] = []
         do {
             let connection = try Connection(configuration: configuration)
@@ -50,7 +50,7 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
                 "\(key) = $\(index + 1)"
             }.joined(separator: " AND ")
             
-            let query = "SELECT * FROM \(querySource.rawValue) WHERE \(whereClause) LIMIT \(limit) OFFSET \(offset);"
+            let query = "SELECT * FROM \(querySource.rawValue) WHERE \(whereClause) ORDER BY id ASC LIMIT \(limit) OFFSET \(offset);"
             let statement = try connection.prepareStatement(text: query)
             defer { statement.close() }
             
@@ -78,7 +78,7 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
                 "$\(index + 1)"
             }.joined(separator: ", ")
 
-            let query = "SELECT * FROM \(querySource.rawValue)(\(placeholders)) LIMIT \(limit) OFFSET \(offset);"
+            let query = "SELECT * FROM \(querySource.rawValue)(\(placeholders)) ORDER BY id ASC LIMIT \(limit) OFFSET \(offset);"
             
             let statement = try connection.prepareStatement(text: query)
             defer { statement.close() }

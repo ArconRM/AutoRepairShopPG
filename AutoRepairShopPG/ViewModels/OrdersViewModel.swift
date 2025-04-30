@@ -18,11 +18,39 @@ class OrdersViewModel: ObservableObject {
     }
     
     func fetchAllOrders(limit: Int, offset: Int) {
-        orders = ordersRepository.getAllOrders(limit: limit, offset: offset)
+        orders = ordersRepository.getAllOrders(
+            limit: limit,
+            offset: offset
+        )
     }
     
     func fetchAllActiveOrders(limit: Int, offset: Int) {
-        orders = ordersRepository.getAllActiveOrders(limit: limit, offset: offset)
+        orders = ordersRepository.getAllActiveOrders(
+            limit: limit,
+            offset: offset
+        )
+    }
+    
+    func fetchOrderById(orderId: Int) {
+        if let order = ordersRepository.getOrderById(orderId: orderId) {
+            orders = [order]
+        }
+    }
+    
+    func fetchOrdersByCarId(carId: Int, limit: Int, offset: Int) {
+        orders = ordersRepository.getOrdersByCarId(
+            carId: carId,
+            limit: limit,
+            offset: offset
+        )
+    }
+    
+    func fetchActiveOrdersByCarId(carId: Int, limit: Int, offset: Int) {
+        orders = ordersRepository.getActiveOrdersByCarId(
+            carId: carId,
+            limit: limit,
+            offset: offset
+        )
     }
     
     func fetchOrdersByClientId(clientId: Int, limit: Int, offset: Int) {
