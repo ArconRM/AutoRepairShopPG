@@ -34,6 +34,8 @@ class OrdersViewModel: ObservableObject {
     func fetchOrderById(orderId: Int) {
         if let order = ordersRepository.getOrderById(orderId: orderId) {
             orders = [order]
+        } else {
+            orders = []
         }
     }
     

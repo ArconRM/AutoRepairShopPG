@@ -9,4 +9,7 @@ import Foundation
 
 protocol MechanicsRepositoryProtocol {
     func getAllMechanics(limit: Int, offset: Int) -> [Mechanic]
+    func getMechanicById(mechanicId: Int) -> Mechanic?
+    func getMechanicByPhoneNumber(phoneNumber: String) -> Mechanic?
+    func getMechanicsBySpecialityId(specialityId: Int, limit: Int, offset: Int) -> [Mechanic]
 }

@@ -19,4 +19,28 @@ class MechanicsViewModel: ObservableObject {
     func fetchAllMechanics(limit: Int, offset: Int) {
         mechanics = mechanicsRepository.getAllMechanics(limit: limit, offset: offset)
     }
+    
+    func fetchMechanicById(mechanicId: Int) {
+        if let mechanic = mechanicsRepository.getMechanicById(mechanicId: mechanicId) {
+            mechanics = [mechanic]
+        } else {
+            mechanics = []
+        }
+    }
+    
+    func fetchMechanicByPhoneNumber(phoneNumber: String) {
+        if let mechanic = mechanicsRepository.getMechanicByPhoneNumber(phoneNumber: phoneNumber) {
+            mechanics = [mechanic]
+        } else {
+            mechanics = []
+        }
+    }
+    
+    func fetchMechanicsBySpeciality(speciality: MechanicSpeciality, limit: Int, offset: Int) {
+        mechanics = mechanicsRepository.getMechanicsBySpecialityId(
+            specialityId: speciality.rawValue,
+            limit: limit,
+            offset: offset
+        )
+    }
 }

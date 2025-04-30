@@ -18,9 +18,9 @@ struct OrdersView: View {
     let itemsPerPage: Int = 1000
     
     enum SearchType: String, CaseIterable {
-        case orderId = "Order ID"
-        case carId = "Car ID"
-        case clientId = "Client ID"
+        case orderId = "ID заказа"
+        case carId = "ID машины"
+        case clientId = "ID клиента"
     }
     
     var body: some View {
@@ -100,7 +100,6 @@ struct OrdersView: View {
                         loadPage()
                     }
                 }
-                .padding(.top)
             }
         }
         .padding()

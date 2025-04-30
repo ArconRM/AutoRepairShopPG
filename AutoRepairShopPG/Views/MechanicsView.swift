@@ -11,12 +11,64 @@ struct MechanicsView: View {
     @ObservedObject var viewModel: MechanicsViewModel
     
     @State private var searchText: String = ""
+    @State private var searchSpecialitySelected: MechanicSpeciality = .AutoMechanic
+    @State private var searchType: SearchType = .mechanicId
     
     @State private var currentPage: Int = 0
     let itemsPerPage: Int = 1000
     
+    enum SearchType: String, CaseIterable {
+        case mechanicId = "ID механика"
+        case phoneNumber = "Номер телефона"
+        case speciality = "Специальность"
+    }
+    
     var body: some View {
         VStack {
+            Picker("Искать по:", selection: $searchType) {
+                ForEach(SearchType.allCases, id: \.self) { type in
+                    Text(type.rawValue).tag(type)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: searchType) { _ in
+                searchText = ""
+                loadPage()
+            }
+            
+            HStack {
+                if searchType == .speciality {
+                    Picker(selection: $searchSpecialitySelected) {
+                        ForEach(MechanicSpeciality.allCases, id: \.self) { speciality in
+                            Text(speciality.name)
+                                .tag(speciality)
+                                .font(.system(size: 15, weight: .bold))
+                        }
+                    } label: {}
+                } else {
+                    TextField("", text: $searchText, prompt: Text("Введите \(searchType.rawValue)"))
+                        .onSubmit {
+                            loadPage()
+                        }
+                }
+                
+                Button("Найти") {
+                    loadPage()
+                }
+                .onChange(of: searchText) { newValue in
+                    if newValue.isEmpty {
+                        loadPage()
+                        return
+                    }
+                    
+                    let filtered = newValue.filter { $0.isNumber }
+                    if filtered != newValue {
+                        searchText = filtered
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            
             Table(viewModel.mechanics) {
                 TableColumn("ID") { mechanic in
                     Text("\(mechanic.id)")
@@ -49,7 +101,6 @@ struct MechanicsView: View {
                         loadPage()
                     }
                 }
-                .padding(.top)
             }
         }
         .padding()
@@ -61,45 +112,23 @@ struct MechanicsView: View {
     private func loadPage() {
         let offset = currentPage * itemsPerPage
         
-        if searchText.isEmpty {
+        if searchText.isEmpty && searchType != .speciality {
             viewModel.fetchAllMechanics(limit: itemsPerPage, offset: offset)
             return
         }
         
-//        let id = Int(searchText) ?? -1
-        
-//        switch searchType {
-//        case .orderId:
-//            viewModel.fetchOrderById(orderId: id)
-//        case .carId:
-//            if showOnlyActiveOrders {
-//                viewModel.fetchActiveOrdersByCarId(
-//                    carId: id,
-//                    limit: itemsPerPage,
-//                    offset: offset
-//                )
-//            } else {
-//                viewModel.fetchOrdersByCarId(
-//                    carId: id,
-//                    limit: itemsPerPage,
-//                    offset: offset
-//                )
-//            }
-//        case .clientId:
-//            if showOnlyActiveOrders {
-//                viewModel.fetchActiveOrdersByClientId(
-//                    clientId: id,
-//                    limit: itemsPerPage,
-//                    offset: offset
-//                )
-//            } else {
-//                viewModel.fetchOrdersByClientId(
-//                    clientId: id,
-//                    limit: itemsPerPage,
-//                    offset: offset
-//                )
-//            }
-//        }
+        switch searchType {
+        case .mechanicId:
+            viewModel.fetchMechanicById(mechanicId: Int(searchText) ?? -1)
+        case .phoneNumber:
+            viewModel.fetchMechanicByPhoneNumber(phoneNumber: "+\(searchText)")
+        case .speciality:
+            viewModel.fetchMechanicsBySpeciality(
+                speciality: searchSpecialitySelected,
+                limit: itemsPerPage,
+                offset: offset
+            )
+        }
     }
 }
 
