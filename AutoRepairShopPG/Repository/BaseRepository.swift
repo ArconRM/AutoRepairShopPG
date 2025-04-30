@@ -16,7 +16,11 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
         self.parser = parser
     }
     
-    func getAllRows(querySource: QuerySources, limit: Int, offset: Int) -> [Parser.Model] {
+    func getAllRows(
+        querySource: QuerySources,
+        limit: Int,
+        offset: Int
+    ) -> [Parser.Model] {
         var result: [Parser.Model] = []
         do {
             let connection = try Connection(configuration: configuration)
@@ -39,7 +43,12 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
         return result
     }
     
-    func getAllRowsWithCondition(querySource: QuerySources, conditionParams: [String: Any], limit: Int, offset: Int) -> [Parser.Model] {
+    func getAllRowsWithCondition(
+        querySource: QuerySources,
+        conditionParams: [String: Any],
+        limit: Int,
+        offset: Int
+    ) -> [Parser.Model] {
         var result: [Parser.Model] = []
         do {
             let connection = try Connection(configuration: configuration)
@@ -68,7 +77,12 @@ class BaseRepository<Parser> where Parser: ParserProtocol {
         return result
     }
     
-    func callStoredFunction(querySource: QuerySources, params: [Any], limit: Int, offset: Int) -> [Parser.Model] {
+    func callStoredFunction(
+        querySource: QuerySources,
+        params: [Any],
+        limit: Int,
+        offset: Int
+    ) -> [Parser.Model] {
         var result: [Parser.Model] = []
         do {
             let connection = try Connection(configuration: configuration)

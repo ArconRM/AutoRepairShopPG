@@ -1,14 +1,14 @@
 //
-//  MechanicsView.swift
+//  ClientsView.swift
 //  AutoRepairShopPG
 //
-//  Created by Artemiy MIROTVORTSEV on 26.04.2025.
+//  Created by Artemiy MIROTVORTSEV on 30.04.2025.
 //
 
 import SwiftUI
 
-struct MechanicsView: View {
-    @ObservedObject var viewModel: MechanicsViewModel
+struct ClientsView: View {
+    @ObservedObject var viewModel: ClientsViewModel
     
     @State private var searchText: String = ""
     
@@ -17,20 +17,16 @@ struct MechanicsView: View {
     
     var body: some View {
         VStack {
-            Table(viewModel.mechanics) {
-                TableColumn("ID") { mechanic in
-                    Text("\(mechanic.id)")
+            Table(viewModel.clients) {
+                TableColumn("ID") { client in
+                    Text("\(client.id)")
                 }
-                TableColumn("ФИО") { mechanic in
-                    Text("\(mechanic.fullName)")
-                }
-                
-                TableColumn("Номер телефона") { mechanic in
-                    Text(mechanic.phoneNumber)
+                TableColumn("ФИО") { client in
+                    Text("\(client.fullName)")
                 }
                 
-                TableColumn("Специальность") { mechanic in
-                    Text(mechanic.speciality.name)
+                TableColumn("Номер телефона") { client in
+                    Text(client.phoneNumber)
                 }
             }
             
@@ -62,7 +58,7 @@ struct MechanicsView: View {
         let offset = currentPage * itemsPerPage
         
         if searchText.isEmpty {
-            viewModel.fetchAllMechanics(limit: itemsPerPage, offset: offset)
+            viewModel.fetchAllClients(limit: itemsPerPage, offset: offset)
             return
         }
         
@@ -104,5 +100,5 @@ struct MechanicsView: View {
 }
 
 #Preview {
-    ViewFactory.shared.makeMechanicsView()
+    ViewFactory.shared.makeCliensView()
 }

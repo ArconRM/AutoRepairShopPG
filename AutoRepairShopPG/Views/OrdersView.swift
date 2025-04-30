@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OrdersView: View {
     @ObservedObject var viewModel: OrdersViewModel
+    
     @State private var searchText: String = ""
     @State private var searchType: SearchType = .orderId
     
@@ -158,5 +159,5 @@ struct OrdersView: View {
 }
 
 #Preview {
-    OrdersView(viewModel: OrdersViewModel(ordersRepository: OrdersRepository(parser: OrdersParser())))
+    ViewFactory.shared.makeOrdersView()
 }

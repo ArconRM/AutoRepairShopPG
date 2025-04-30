@@ -10,19 +10,19 @@ import SwiftUI
 struct MainAdminView: View {
     var body: some View {
         TabView {
-            OrdersView(viewModel: OrdersViewModel(ordersRepository: OrdersRepository(parser: OrdersParser())))
+            ViewFactory.shared.makeOrdersView()
                 .tabItem {
                     Label("Заказы", systemImage: "house")
                 }
             
-            Text("Second Tab")
+            ViewFactory.shared.makeMechanicsView()
                 .tabItem {
                     Label("Механики", systemImage: "gear")
                 }
             
-            Text("Second Tab")
+            ViewFactory.shared.makeCliensView()
                 .tabItem {
-                    Label("Клиенты", systemImage: "gear")
+                    Label("Клиенты", systemImage: "person")
                 }
         }
     }

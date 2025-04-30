@@ -15,4 +15,6 @@ enum QuerySources: String {
     case activeOrdersByClientIdFunction = "get_active_orders_by_client"
     
     case mechanics
+    
+    case clients
 }
